@@ -31,7 +31,9 @@ internal open class CountdownThreadHandler(val runnable: Runnable) {
             override fun run() {
                 try {
                     sleep(countdownTime)
-                    runnable.run()
+                    synchronized(runnable){
+                        runnable.run()
+                    }
                 } catch (iox: InterruptedException) {
                     currentThread().interrupt()
                 }
@@ -41,6 +43,12 @@ internal open class CountdownThreadHandler(val runnable: Runnable) {
         lastStart = current
         lastDuration = duration
         CountdownThread@ this.thread = thread
+    }
+
+    fun cancelTimer(){
+        synchronized(runnable){
+            interrupt()
+        }
     }
 
     private fun interrupt() {

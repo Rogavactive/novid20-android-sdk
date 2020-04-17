@@ -204,6 +204,7 @@ internal class NovidSdkImpl internal constructor(
         if (serviceRunning && !detectionRunning) {
             Logger.debug(TAG, "startDetection")
             analytics.sendEvent(EVENT_DETECTION_ON)
+            turnDetectionOffHandler.cancelTimer()
 
             val bluetoothFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
             context.registerReceiver(bluetoothChangeReceiver, bluetoothFilter)
